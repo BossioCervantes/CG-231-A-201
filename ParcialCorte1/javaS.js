@@ -1,37 +1,38 @@
-function Geometria (vx) {
-    geom = new TRHEE.Geometry();
-    var LargoVertice = vx.lenght;
-    for (i=0; i<LargoVertice; i++) {
-        [x,y,z] = [vx[i][0], vx[i][1],vx[i][2]];
-        vector = new TRHEE.Vector3(x,y,z)
+function Geometria(vx){
+    geom = new THREE.Geometry();
+    var largoVertice = vx.length;
+    for (i=0; i<largoVertice; i++) {
+        x = vx[i][0];
+        y = vx[i][1];
+        z = vx[i][2];
+        vector = new THREE.Vector3(x,y,z);
         geom.vertices.push(vector);
     }
     return geom;
 }
-function Traslacion (vt) {
-    var MatrizT= new TRHEE.Matrix4();
-    MatrizT.set(
+function Traslacion(vt) {
+    var matrizT= new THREE.Matrix4();
+    matrizT.set(
         1,0,0,vt[0],
         0,1,0,vt[1],
         0,0,1,vt[2],
         0,0,0,1
     );
-
-    return MatrizT;
+    return matrizT;
 }
-function Escalado (vs) {
-    var MatrizS = new TRHEE.Matrix4();
-    MatrizS.set (
+function Escalado(vs) {
+    var matrizS = new THREE.Matrix4();
+    matrizS.set (
         vs[0],0,0,0,
         0,vs[1],0,0,
         0,0,vs[2],0,
         0,0,0,1
     );
-    return MatrizS; 
+    return matrizS; 
 }
 function EscaladoReal(fig,posini,vs) {
      //Vector para llevar al origen
-    tr = [-posini[0],-posini[1],-posini[2]];
+    tr = [-posini[0], -posini[1], -posini[2]];
     fig.applyMatrix(Traslacion(tr));
     fig.applyMatrix(Escalado(vs));
     fig.applyMatrix(Traslacion(posini)); 
@@ -74,12 +75,12 @@ function init() {
 
     //Creación de las Figuras
     //Geometria de la piramide
-    lado = 30;
-    h = 45;
-    [v1,v2,v3,v4,v5] = [[0,0,0][lado,0,0][lado,0,lado][0,0,lado][lado/2,h,lado/2]];
-    var vertices = [v1,v2,v3,v4,v5,v1,v2,v3,v4,v5,v2];
+    lado =30;
+    h =45;
+    [v1,v2,v3,v4,v5] =[[0,0,0],[lado,0,0],[lado,0,lado],[0,0,lado],[lado/2,h,lado/2]]
+    var vertices = [v1,v2,v3,v4,v5,v1,v4,v3,v5,v2];
     geomPiramide = Geometria(vertices);
-//    var largoVertice = vertices.length;
+    var largoVertice = vertices.length;
 
     // Colores para las piramides
     color = [{color:0xFF0000}, {color:0x00ff00}];
@@ -99,14 +100,16 @@ function init() {
     // En el documento HTML
     document.body.appendChild(renderer.domElement);
 
-    scene.add(gridHelperXZ);
-    scene.add(ArrowX);
-    scene.add(ArrowY);
-    scene.add(ArrowZ);
-    for  (i=0; i < 2; i++);
-        scene.add(piramide[i]);
+    EscaladoReal(piramide[1],[0,0,0], [1,-1,1]);
 
-    renderer.render(scene, camera);
+    scene.add(gridHelperXZ);
+    scene.add(arrowX);
+    scene.add(arrowY);
+    scene.add(arrowZ);
+    for  (i=0; i < 2; i++){
+        scene.add(piramide[i]);
+        renderer.render(scene, camera);
+    }
 }
 
 init();
